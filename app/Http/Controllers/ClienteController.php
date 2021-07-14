@@ -56,20 +56,20 @@ class ClienteController extends Controller
             'email'
         );
 
-        $messages = [
-            'same' => 'The :attribute and :other must match.',
-            'size' => 'The :attribute must be exactly :size.',
-            'between' => 'The :attribute value :input is not between :min - :max.',
-            'in' => 'The :attribute must be one of the following types: :values',
-            'required' => 'The :attribute field is required.',
-        ];
+        // $messages = [
+        //     'same' => 'The :attribute and :other must match.',
+        //     'size' => 'The :attribute must be exactly :size.',
+        //     'between' => 'The :attribute value :input is not between :min - :max.',
+        //     'in' => 'The :attribute must be one of the following types: :values',
+        //     'required' => 'The :attribute field is required.',
+        // ];
 
         $validator = Validator::make($data, [
             'nome' => 'required|string',
             'data_nascimento' => 'date',
             'cpf_cnpj' => 'required|string|unique:clientes',
             'email' => 'email'
-        ], $messages);
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
