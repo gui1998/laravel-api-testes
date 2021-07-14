@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -19,18 +20,18 @@ class PlanController extends Controller
 
         $query = Plan::query();
 
-        if ($request->has('amount_value')) {            
+        if ($request->has('amount_value')) {
             $params = $this->queryParams($request->amount_value);
             $query->where('amount_value', $params['condition'], $params['value']);
         }
-    
+
         if ($request->has('discount_value')) {
             $params = $this->queryParams($request->discount_value);
             $query->where('discount_value', $params['condition'], $params['value']);
         }
-    
+
         $query->whereMonth('created_at', '=', date('m'));
-        if ($request->has('month')) {        
+        if ($request->has('month')) {
             $params = $this->queryParams($request->month);
             $query->whereMonth('created_at', $params['condition'], $params['value']);
         }
@@ -38,27 +39,15 @@ class PlanController extends Controller
         $plans = $query->paginate();
 
         return $plans;
-       
     }
 
-    // public function dailyStatistic(){
-
-    //     $plans = DB::table('plans')
-    //     ->select(DB::raw('sum(amount_value+discount_value) as total, name'))
-    //     ->whereMonth('created_at', '=', date('m'))
-    //     ->groupBy('name')
-    //     ->get();
-
-    //     return $plans;
-    // }
-
-
-    public function dailyStatistic(){
+    public function dailyStatistic()
+    {
         $plans = DB::table('plans')
-        ->select('id','name',(DB::raw('sum(amount_value+discount_value) as total')))
-        ->groupBy('name')
-        ->groupBy('id')
-        ->get();
+            ->select('id', 'name', (DB::raw('sum(amount_value+discount_value) as total')))
+            ->groupBy('name')
+            ->groupBy('id')
+            ->get();
 
         return $plans;
     }
@@ -87,10 +76,10 @@ class PlanController extends Controller
             'identifier',
             'amount_value',
             'discount_value'
-        );      
+        );
 
         $created = Plan::create($data);
-        
+
         return response()->json($created, 201);
     }
 
